@@ -6,7 +6,7 @@ Uses the [400M English checkpoint](https://huggingface.co/nineninesix/kani-tts-2
 
 Voice cloning is built in. Import 3-30 seconds of one speaker, then reuse the returned voice ID. No transcript or voice fine-tuning is needed. The [upstream guide](https://github.com/nineninesix-ai/kani-tts-2) recommends 10-20 seconds of clear speech without music or background noise.
 
-**Locally validated:** 22 tests pass, including both MCP transports. A 25.75-second cloned narration across two segments took 41.91 seconds with models resident and peaked at 2,719 MiB dedicated VRAM. A short warm speech request produced 7.12 seconds of audio in 11.14 seconds. See [measurements and limits](docs/gpu-validation.md); voice similarity was not scored.
+**Locally validated:** 32 tests pass, including both MCP transports and named voice selection. A 25.75-second cloned narration across two segments took 41.91 seconds with models resident and peaked at 2,719 MiB dedicated VRAM. A short warm speech request produced 7.12 seconds of audio in 11.14 seconds. See [measurements and limits](docs/gpu-validation.md); voice similarity was not scored.
 
 ## Install
 
@@ -36,7 +36,7 @@ Without a PATH refresh, run commands as:
 ## Generate speech
 
 ```powershell
-kani-tts generate --text "Hello. This speech is generated locally." --seed 42 --wait --out hello.wav
+kani-tts generate --text "Hello. This speech is generated locally." --voice andrew --seed 42 --out hello.wav
 kani-tts generate --text-file script.txt --wait --out narration.wav
 kani-tts generate --request examples/speech.json --wait
 ```
@@ -60,7 +60,31 @@ Six English accent tags are available:
 kani-tts generate --text "Good morning. How are you today?" --language-tag en_glasg --wait
 ```
 
-Accent tags condition the model; they do not select fixed named speakers. Without a reference voice, the model chooses a voice.
+**Accent tags do not select speakers.** For example, `--language-tag en_oakl --seed 204` alone does not reproduce Jermaine. Use `--voice jermaine` to supply the actual speaker embedding. Without a preset or reference voice, the model chooses a speaker.
+
+## Named preset voices
+
+`--voice` selects the official demo's speaker embedding and defaults to that speaker's accent. The preset names are `frank`, `chelsea`, `rory`, `jermaine`, `baddy`, `callum`, `andrew`, `kore`, and `puck`. Use `kani-tts voices` to list presets with availability alongside imported references. You can override the accent with `--language-tag` when desired.
+
+Fresh `setup-models` installations include the presets. For an existing checkout after updating:
+
+```powershell
+git pull
+kani-tts stop
+kani-tts setup-presets
+```
+
+These five commands select the exact speaker embeddings, text, accent defaults, and seeds used for the example clips:
+
+```powershell
+kani-tts generate --text "Good morning. Your coffee is ready, and the day is yours." --voice frank --seed 201 --out frank.wav
+kani-tts generate --text "The city is wide awake, so let's make something happen." --voice chelsea --seed 202 --out chelsea.wav
+kani-tts generate --text "Take your time. A good story is always worth the wait." --voice rory --seed 203 --out rory.wav
+kani-tts generate --text "Well, that went better than expected. Let's call it a win." --voice jermaine --seed 204 --out jermaine.wav
+kani-tts generate --text "Come on, we're nearly there. Just one more step." --voice baddy --seed 205 --out baddy.wav
+```
+
+Preset downloads are pinned to the [official demo revision](https://huggingface.co/spaces/nineninesix/kanitts-2-en/tree/3b4930245592b63263d490503212ce44d8a00277/speakers), verified with SHA-256, and loaded locally with `weights_only=True`. Missing or corrupted presets produce an error with `setup-presets` instructions; they never silently fall back to an unconditioned voice. Choose one of `--voice`, `--voice-id`, or `--reference-audio` for each request.
 
 ## Clone a voice
 
@@ -93,9 +117,9 @@ For other hosts, adapt [mcp-config.example.json](mcp-config.example.json) to the
 
 | Tool | Purpose |
 | --- | --- |
-| `generate_speech` | Queue English text, optional `voice_id`, accent, sampling parameters and seed |
+| `generate_speech` | Queue English text, preset `voice` or reference `voice_id`, accent, sampling parameters and seed |
 | `upload_voice` | Import an absolute local reference-audio path and return a voice ID |
-| `list_voices` | List imported references |
+| `list_voices` | List named presets with availability and imported references |
 | `get_speech_job` | Read status, stage, errors, output paths, timing and memory |
 | `cancel_speech_job` | Cancel queued work or interrupt generation at a model boundary |
 | `speech_service_status` | Read readiness, GPU and model availability |
@@ -108,7 +132,8 @@ Example request:
 {
   "text": "Welcome. This sentence was generated on the local machine.",
   "voice_id": null,
-  "language_tag": "en_us",
+  "voice": "jermaine",
+  "language_tag": null,
   "temperature": 1.0,
   "top_p": 0.95,
   "repetition_penalty": 1.1,
@@ -119,6 +144,8 @@ Example request:
 ```
 
 Retrying an identical request with the same `client_request_id` returns the existing job. Reusing that ID for different parameters returns an error.
+
+For MCP and HTTP requests, `voice` is the preset name and `voice_id` is an imported recording ID. They are mutually exclusive. Omitted or null `language_tag` uses the preset's accent, or `en_us` when no preset is selected. Restart the MCP host after updating to discover the new `voice` parameter.
 
 ## HTTP
 
@@ -141,7 +168,7 @@ Invoke-RestMethod "http://127.0.0.1:8768/v1/jobs/$($kaniJob.job_id)" -Headers $k
 | GET | `/v1/jobs/{id}/audio` | Download successful WAV |
 | GET | `/v1/jobs/{id}/metadata` | Download request/result JSON |
 | POST | `/v1/voices?name=MyVoice` | Upload raw audio bytes, not multipart or a local path |
-| GET | `/v1/voices` | List imported references |
+| GET | `/v1/voices` | List preset voices and imported references |
 | POST | `/admin/shutdown` | Stop worker |
 | MCP | `/mcp` | Streamable HTTP MCP; use the same bearer header |
 
@@ -178,6 +205,7 @@ Set `KANI_TTS_HOME` to use another data directory. Defaults:
 ```text
 data/config.json       GPU UUID, bearer token, port, allocator budget, residency
 data/models/           Pinned weights, tokenizers, download verification manifest
+data/models/presets/   Verified named speaker embeddings from the official demo
 data/voices/           Reference WAVs, voice metadata, cached embeddings
 data/outputs/          Job WAVs and JSON metadata
 data/jobs.sqlite3      Persistent queue
@@ -197,6 +225,16 @@ powershell -ExecutionPolicy Bypass -File scripts/test.ps1
 ```
 
 Tests cover actual stdio and HTTP MCP sessions, hidden-worker lifetime after disconnect, request bounds, queue persistence, idempotency, cancellation, authentication, voice upload/resampling, artifact retrieval, and codec convolution equivalence. Protocol tests intentionally use isolated homes without model files so missing weights must produce actionable errors.
+
+To generate all five named examples through the public CLI:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/validate_presets_live.py
+# Compare against the original local demo WAVs, if you have them:
+.\.venv\Scripts\python.exe scripts/validate_presets_live.py --compare-dir data/demos
+```
+
+The preset test writes a sanitized report to `docs/preset-validation.json` and audio to `data/preset-validation/`. It uses [five-voices.json](examples/five-voices.json); it does not depend on the temporary script used to create the original demos.
 
 For an opt-in GPU test that generates speech, imports a synthetic reference, generates a clone, checks MCP audio attachments, and synthesizes a longer passage through HTTP MCP:
 

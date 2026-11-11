@@ -1,0 +1,100 @@
+{
+  "method": "Public CLI with named voice, original text and seed",
+  "voices": [
+    {
+      "voice": "frank",
+      "request": {
+        "text": "Good morning. Your coffee is ready, and the day is yours.",
+        "voice_id": null,
+        "voice": "frank",
+        "language_tag": "en_bost",
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "repetition_penalty": 1.1,
+        "max_new_tokens": 2500,
+        "seed": 201,
+        "client_request_id": null
+      },
+      "duration_seconds": 4.72,
+      "audio_sha256": "b737cc86087a42d7f728c0a2b38bc2296cda29343e07a2044422af10a285d4eb",
+      "demo_sha256": "b737cc86087a42d7f728c0a2b38bc2296cda29343e07a2044422af10a285d4eb",
+      "identical_to_demo": true
+    },
+    {
+      "voice": "chelsea",
+      "request": {
+        "text": "The city is wide awake, so let's make something happen.",
+        "voice_id": null,
+        "voice": "chelsea",
+        "language_tag": "en_nyork",
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "repetition_penalty": 1.1,
+        "max_new_tokens": 2500,
+        "seed": 202,
+        "client_request_id": null
+      },
+      "duration_seconds": 4.4,
+      "audio_sha256": "1d1d0bf25fa0d4ab7d0f494e775831c66c382293eaf3ada7f9101d9f2c565aa0",
+      "demo_sha256": "1d1d0bf25fa0d4ab7d0f494e775831c66c382293eaf3ada7f9101d9f2c565aa0",
+      "identical_to_demo": true
+    },
+    {
+      "voice": "rory",
+      "request": {
+        "text": "Take your time. A good story is always worth the wait.",
+        "voice_id": null,
+        "voice": "rory",
+        "language_tag": "en_glasg",
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "repetition_penalty": 1.1,
+        "max_new_tokens": 2500,
+        "seed": 203,
+        "client_request_id": null
+      },
+      "duration_seconds": 4.0,
+      "audio_sha256": "72aef2bdd4a32661df6a893f57d2e38056d6f83e3f8dc1646e3cda85dfed7ce7",
+      "demo_sha256": "72aef2bdd4a32661df6a893f57d2e38056d6f83e3f8dc1646e3cda85dfed7ce7",
+      "identical_to_demo": true
+    },
+    {
+      "voice": "jermaine",
+      "request": {
+        "text": "Well, that went better than expected. Let's call it a win.",
+        "voice_id": null,
+        "voice": "jermaine",
+        "language_tag": "en_oakl",
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "repetition_penalty": 1.1,
+        "max_new_tokens": 2500,
+        "seed": 204,
+        "client_request_id": null
+      },
+      "duration_seconds": 2.64,
+      "audio_sha256": "557033584f41329f7333a81e65a10be257ada2ce8fcbe36d819508216e33148e",
+      "demo_sha256": "557033584f41329f7333a81e65a10be257ada2ce8fcbe36d819508216e33148e",
+      "identical_to_demo": true
+    },
+    {
+      "voice": "baddy",
+      "request": {
+        "text": "Come on, we're nearly there. Just one more step.",
+        "voice_id": null,
+        "voice": "baddy",
+        "language_tag": "en_scou",
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "repetition_penalty": 1.1,
+        "max_new_tokens": 2500,
+        "seed": 205,
+        "client_request_id": null
+      },
+      "duration_seconds": 3.6,
+      "audio_sha256": "83068d6fdc1db597e63d80e7026ae21226411189e2591850831b446d25548c5d",
+      "demo_sha256": "83068d6fdc1db597e63d80e7026ae21226411189e2591850831b446d25548c5d",
+      "identical_to_demo": true
+    }
+  ]
+}

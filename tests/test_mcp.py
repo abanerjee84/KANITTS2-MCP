@@ -70,6 +70,8 @@ async def exercise(session, reference_path):
         "upload_voice",
         "list_voices",
     }
+    tools_by_name = {t.name: t for t in (await session.list_tools()).tools}
+    assert "voice" in tools_by_name["generate_speech"].inputSchema["properties"]
     result = await session.call_tool("speech_service_status", {})
     assert not result.isError
     text = "\n".join(c.text for c in result.content if c.type == "text")
@@ -83,6 +85,13 @@ async def exercise(session, reference_path):
     assert uploaded.structuredContent["voice_id"] in [
         v["voice_id"] for v in voices.structuredContent["voices"]
     ]
+    assert "jermaine" in [p["voice"] for p in voices.structuredContent["presets"]]
+    preset = await session.call_tool(
+        "generate_speech", {"text": "Preset test", "voice": "jermaine", "seed": 204}
+    )
+    assert not preset.isError
+    assert preset.structuredContent["request"]["voice"] == "jermaine"
+    assert preset.structuredContent["request"]["language_tag"] == "en_oakl"
     # These tests intentionally have no model weights. A real submission must fail honestly.
     submitted = await session.call_tool(
         "generate_speech",

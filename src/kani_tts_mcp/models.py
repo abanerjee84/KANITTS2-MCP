@@ -55,6 +55,9 @@ def setup_models(settings):
             hashes[name] = file_sha256(path)
         manifest[component] = {"repo": repo, "revision": rev, "sha256": hashes}
     settings.models.mkdir(parents=True, exist_ok=True)
+    from .presets import setup_presets
+
+    manifest["presets"] = setup_presets(settings)
     (settings.models / "manifest.json").write_text(
         json.dumps(manifest, indent=2), "utf-8"
     )

@@ -1,0 +1,7 @@
+[
+  {"voice": "frank", "seed": 201, "text": "Good morning. Your coffee is ready, and the day is yours.", "demo_file": "01-frank-boston.wav"},
+  {"voice": "chelsea", "seed": 202, "text": "The city is wide awake, so let's make something happen.", "demo_file": "02-chelsea-new-york.wav"},
+  {"voice": "rory", "seed": 203, "text": "Take your time. A good story is always worth the wait.", "demo_file": "03-rory-glasgow.wav"},
+  {"voice": "jermaine", "seed": 204, "text": "Well, that went better than expected. Let's call it a win.", "demo_file": "04-jermaine-oakland.wav"},
+  {"voice": "baddy", "seed": 205, "text": "Come on, we're nearly there. Just one more step.", "demo_file": "05-baddy-liverpool.wav"}
+]

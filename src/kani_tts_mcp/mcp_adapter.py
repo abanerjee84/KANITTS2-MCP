@@ -6,7 +6,7 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import AudioContent, CallToolResult, TextContent, ToolAnnotations
 
 from .client import Client
-from .schema import SpeechRequest
+from .schema import PresetName, SpeechRequest
 
 
 def structured(value):
@@ -27,6 +27,8 @@ def create_mcp(settings, autostart=True):
         instructions="Local KaniTTS 2 400M English speech on RTX 3060. Returns job_id immediately; "
         "poll get_speech_job. For voice cloning upload 3-30 seconds of clean single-speaker audio "
         "with upload_voice, then pass voice_id. References are local paths. WAV output at 22050 Hz. "
+        "Select a named demo speaker with voice (frank, chelsea, rory, jermaine, baddy, callum, andrew, kore, puck). "
+        "A language_tag sets accent only; it does not select a speaker. "
         "Long text is split into short segments. Model weights use LFM1.0 terms.",
     )
     write = ToolAnnotations(
@@ -38,18 +40,24 @@ def create_mcp(settings, autostart=True):
     async def generate_speech(
         text: str,
         voice_id: str | None = None,
-        language_tag: str = "en_us",
+        language_tag: str | None = None,
         temperature: float = 1.0,
         top_p: float = 0.95,
         repetition_penalty: float = 1.1,
         max_new_tokens: int = 2500,
         seed: int | None = None,
         client_request_id: str | None = None,
+        voice: PresetName | None = None,
     ) -> CallToolResult:
-        """Queue English speech. Omit voice_id for a model-selected voice. Seed -1/omitted is random."""
+        """Queue English speech. Set voice for a named preset or voice_id for a cloned voice.
+
+        Omitted language_tag uses the preset's accent, or en_us without a preset.
+        Omit both voice and voice_id for a model-selected speaker. Seed -1/omitted is random.
+        """
         req = SpeechRequest(
             text=text,
             voice_id=voice_id,
+            voice=voice,
             language_tag=language_tag,
             temperature=temperature,
             top_p=top_p,
@@ -75,7 +83,7 @@ def create_mcp(settings, autostart=True):
 
     @mcp.tool(annotations=read)
     async def list_voices() -> CallToolResult:
-        """List imported reference voices and their IDs."""
+        """List named preset voices with availability, plus imported reference voices and IDs."""
         return structured(await asyncio.to_thread(client.voices))
 
     @mcp.tool(annotations=read)

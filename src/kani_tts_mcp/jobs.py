@@ -70,7 +70,7 @@ class JobStore:
                     (req.client_request_id,),
                 ).fetchone()
                 if old:
-                    previous = json.loads(old[1])
+                    previous = SpeechRequest.model_validate_json(old[1]).model_dump()
                     current = req.model_dump()
                     # An automatically chosen seed is not part of retry identity.
                     for key in ("seed",):

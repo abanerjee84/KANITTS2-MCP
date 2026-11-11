@@ -142,9 +142,10 @@ def create_app(settings: Settings, backend=None):
 
     @app.get("/v1/voices")
     def voices():
+        from .presets import list_presets
         from .voices import list_voices
 
-        return {"voices": list_voices(settings.home)}
+        return {"voices": list_voices(settings.home), "presets": list_presets(settings)}
 
     app.mount("/", mcp.streamable_http_app())
     return app

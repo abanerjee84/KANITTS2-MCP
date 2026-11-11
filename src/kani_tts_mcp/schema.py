@@ -1,23 +1,39 @@
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from .presets import PRESETS
 
 MAX_REFERENCE_BYTES = 32 * 1024 * 1024
+PresetName = Literal[
+    "frank", "chelsea", "rory", "jermaine", "baddy", "callum", "andrew", "kore", "puck"
+]
 
 
 class SpeechRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
     text: str = Field(min_length=1, max_length=12000)
     voice_id: str | None = Field(default=None, pattern=r"^[0-9a-f]{32}$")
-    language_tag: Literal[
-        "en_us", "en_nyork", "en_oakl", "en_glasg", "en_bost", "en_scou"
-    ] = "en_us"
+    voice: PresetName | None = None
+    language_tag: (
+        Literal["en_us", "en_nyork", "en_oakl", "en_glasg", "en_bost", "en_scou"] | None
+    ) = None
     temperature: float = Field(default=1.0, ge=0.1, le=2)
     top_p: float = Field(default=0.95, gt=0, le=1)
     repetition_penalty: float = Field(default=1.1, ge=1, le=2)
     max_new_tokens: int = Field(default=2500, ge=100, le=3000)
     seed: int | None = Field(default=None, ge=-1, le=2**32 - 1)
     client_request_id: str | None = Field(default=None, min_length=1, max_length=128)
+
+    @model_validator(mode="after")
+    def resolve_speaker(self):
+        if self.voice and self.voice_id:
+            raise ValueError("Choose a preset voice or a reference voice_id, not both")
+        if self.language_tag is None:
+            self.language_tag = (
+                PRESETS[self.voice]["language_tag"] if self.voice else "en_us"
+            )
+        return self
 
     @field_validator("text")
     @classmethod

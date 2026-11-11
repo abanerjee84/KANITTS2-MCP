@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .client import Client
 from .config import gpu_inventory, load_settings
+from .presets import PRESETS
 from .schema import SpeechRequest
 
 
@@ -15,7 +16,9 @@ def emit(value):
 
 def main():
     parser = argparse.ArgumentParser(
-        prog="kani-tts", description="Local KaniTTS 2 English speech and cloning"
+        prog="kani-tts",
+        description="Local KaniTTS 2 English speech and cloning",
+        allow_abbrev=False,
     )
     sub = parser.add_subparsers(dest="command", required=True)
     for cmd in (
@@ -25,6 +28,7 @@ def main():
         "mcp",
         "install-cli",
         "setup-models",
+        "setup-presets",
         "voices",
         "mcp-config",
     ):
@@ -38,18 +42,25 @@ def main():
     voice = sub.add_parser("upload-voice")
     voice.add_argument("audio_path", type=Path)
     voice.add_argument("--name", default="Reference voice")
-    gen = sub.add_parser("generate")
+    gen = sub.add_parser("generate", allow_abbrev=False)
     inputs = gen.add_mutually_exclusive_group(required=True)
     inputs.add_argument("--text")
     inputs.add_argument("--text-file", type=Path)
     inputs.add_argument("--request", type=Path)
-    gen.add_argument("--voice-id")
+    speakers = gen.add_mutually_exclusive_group()
+    speakers.add_argument(
+        "--voice",
+        choices=list(PRESETS),
+        help="Named demo speaker; defaults to that speaker's accent",
+    )
+    speakers.add_argument("--voice-id", help="Imported reference voice ID")
+    speakers.add_argument("--reference-audio", type=Path)
     gen.add_argument(
         "--language-tag",
         choices=["en_us", "en_nyork", "en_oakl", "en_glasg", "en_bost", "en_scou"],
-        default="en_us",
+        default=None,
+        help="Accent only; does not choose a speaker. Defaults to the preset's accent, otherwise en_us.",
     )
-    gen.add_argument("--reference-audio", type=Path)
     gen.add_argument("--temperature", type=float, default=1.0)
     gen.add_argument("--top-p", type=float, default=0.95)
     gen.add_argument("--repetition-penalty", type=float, default=1.1)
@@ -120,6 +131,10 @@ def main():
             from .models import setup_models
 
             emit(setup_models(settings))
+        elif args.command == "setup-presets":
+            from .presets import setup_presets
+
+            emit(setup_presets(settings))
         elif args.command == "configure":
             if client.reachable():
                 raise RuntimeError("Stop the service before changing residency")
@@ -147,8 +162,6 @@ def main():
             if args.request:
                 req = SpeechRequest.model_validate_json(args.request.read_text("utf-8"))
             else:
-                if args.voice_id and args.reference_audio:
-                    raise ValueError("Choose --voice-id or --reference-audio")
                 voice_id = (
                     client.upload_voice(str(args.reference_audio.resolve()))["voice_id"]
                     if args.reference_audio
@@ -159,6 +172,7 @@ def main():
                     if args.text_file
                     else args.text,
                     voice_id=voice_id,
+                    voice=args.voice,
                     language_tag=args.language_tag,
                     temperature=args.temperature,
                     top_p=args.top_p,

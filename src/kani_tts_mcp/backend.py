@@ -7,6 +7,7 @@ import time
 from .config import select_gpu
 from .jobs import Cancelled
 from .models import CODEC_FILE, PINS, load_codec
+from .presets import list_presets, load_preset
 from .voices import voice_path
 
 
@@ -66,6 +67,7 @@ class KaniBackend:
             "keep_loaded": self.settings.keep_loaded,
             "memory_budget_gib": self.settings.memory_gib,
             "last_memory": self.memory,
+            "presets": list_presets(self.settings),
         }
 
     def _load(self, progress):
@@ -145,7 +147,12 @@ class KaniBackend:
             torch.manual_seed(req.seed)
             torch.cuda.manual_seed_all(req.seed)
             embedding = None
-            if req.voice_id:
+            if req.voice:
+                progress("loading_preset_voice", 15)
+                embedding = load_preset(
+                    self.settings, req.voice, dtype=self.model.dtype
+                )
+            elif req.voice_id:
                 reference = voice_path(self.settings.home, req.voice_id)
                 cached = reference.with_suffix(".safetensors")
                 progress("embedding_voice", 15)
@@ -257,6 +264,7 @@ class KaniBackend:
                 "chunks": len(chunks),
                 "seed": req.seed,
                 "voice_id": req.voice_id,
+                "voice": req.voice,
                 "memory": self.memory,
             }
             path.with_suffix(".json").write_text(

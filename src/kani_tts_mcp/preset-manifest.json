@@ -1,0 +1,65 @@
+{
+  "frank": {
+    "name": "Frank",
+    "accent": "Boston",
+    "file": "boston_sp_4.pt",
+    "language_tag": "en_bost",
+    "sha256": "824c0e9df881d0073a64bc020c9d55db1a2e8fc7911e9b6e07cfcf775479f1ef"
+  },
+  "chelsea": {
+    "name": "Chelsea",
+    "accent": "New York",
+    "file": "new_york_sp_1.pt",
+    "language_tag": "en_nyork",
+    "sha256": "8e82e94fb2de05d68416319b97247ccec331f48c489360930384143f530ba9bf"
+  },
+  "rory": {
+    "name": "Rory",
+    "accent": "Glasgow",
+    "file": "glasg_sp_1.pt",
+    "language_tag": "en_glasg",
+    "sha256": "a2889f2f80a63cc2fcf2041a428df8e944a9b4648f03b5c2862c45e44134394f"
+  },
+  "jermaine": {
+    "name": "Jermaine",
+    "accent": "Oakland",
+    "file": "oakl_sp_1.pt",
+    "language_tag": "en_oakl",
+    "sha256": "9f9ed9b65dc01a96c813f541d9a439413a70485df5ed2c6113a136285caf4e65"
+  },
+  "baddy": {
+    "name": "Baddy",
+    "accent": "Liverpool",
+    "file": "scou_sp_1.pt",
+    "language_tag": "en_scou",
+    "sha256": "c3535892b319d47c299d671e4437d64841cccca619105fb007b31f571c17be23"
+  },
+  "callum": {
+    "name": "Callum",
+    "accent": "Glasgow",
+    "file": "glasg_sp_3.pt",
+    "language_tag": "en_glasg",
+    "sha256": "16c2211549b4ba917d80401c88d3e7c5ac29092917c92eec365f579f0f90372a"
+  },
+  "andrew": {
+    "name": "Andrew",
+    "accent": "San Francisco",
+    "file": "speaker_3.pt",
+    "language_tag": "en_us",
+    "sha256": "fae7353754ebadd13ee8579ce8dd7698f9f758b6eb6c020fc763897ea89aed15"
+  },
+  "kore": {
+    "name": "Kore",
+    "accent": "US English",
+    "file": "speaker_1.pt",
+    "language_tag": "en_us",
+    "sha256": "90ec546eae407312d8ae0fb6b9bc4827de840ac54be3af38378d4f4cd3193bcb"
+  },
+  "puck": {
+    "name": "Puck",
+    "accent": "US English",
+    "file": "speaker_2.pt",
+    "language_tag": "en_us",
+    "sha256": "13080bc33d44a750d8e3b2f8b5100b2ce1b09fb4a0fc50032ec0c0bb0545d4a9"
+  }
+}
