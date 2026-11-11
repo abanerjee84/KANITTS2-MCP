@@ -1,0 +1,115 @@
+{
+  "model": "nineninesix/kani-tts-2-en",
+  "runs": {
+    "stdio_speech": {
+      "sample_rate": 22050,
+      "duration_seconds": 7.12,
+      "elapsed_seconds": 11.141,
+      "chunks": 1,
+      "seed": 73,
+      "voice_id": null,
+      "memory": {
+        "peak_allocated_mib": 989.2,
+        "peak_reserved_mib": 1152.0,
+        "gpu_uuid": "GPU-1fbff0da-1530-2c25-e1df-4f00ecd1601b",
+        "gpu_name": "NVIDIA GeForce RTX 3060",
+        "windows_driver": {
+          "available": true,
+          "samples": 22,
+          "peak_dedicated_mib": 1281.17,
+          "peak_shared_mib": 78.0,
+          "current_dedicated_mib": 1281.17,
+          "current_shared_mib": 78.0
+        }
+      },
+      "audio_sha256": "6f63d6440e713eb730f831bf50fe922bb2e98a213a2ca428d0504d453fc2f357",
+      "request": {
+        "text": "This is a real speech generation test through the local MCP connection. The audio stays on this computer.",
+        "voice_id": null,
+        "language_tag": "en_us",
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "repetition_penalty": 1.1,
+        "max_new_tokens": 2500,
+        "seed": 73,
+        "client_request_id": null
+      }
+    },
+    "stdio_cloning": {
+      "sample_rate": 22050,
+      "duration_seconds": 6.0,
+      "elapsed_seconds": 30.594,
+      "chunks": 1,
+      "seed": 74,
+      "voice_id": "48ffaf6ecefa4086afc0a6898ec22311",
+      "memory": {
+        "peak_allocated_mib": 2210.3,
+        "peak_reserved_mib": 2262.0,
+        "gpu_uuid": "GPU-1fbff0da-1530-2c25-e1df-4f00ecd1601b",
+        "gpu_name": "NVIDIA GeForce RTX 3060",
+        "windows_driver": {
+          "available": true,
+          "samples": 61,
+          "peak_dedicated_mib": 2391.18,
+          "peak_shared_mib": 78.0,
+          "current_dedicated_mib": 2391.18,
+          "current_shared_mib": 78.0
+        }
+      },
+      "audio_sha256": "9d29b739669c656e2e637003e6e11319a818470c7d2546420486a5ab52ebca14",
+      "request": {
+        "text": "This is different text spoken using a reference voice. No training was required.",
+        "voice_id": "48ffaf6ecefa4086afc0a6898ec22311",
+        "language_tag": "en_us",
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "repetition_penalty": 1.1,
+        "max_new_tokens": 2500,
+        "seed": 74,
+        "client_request_id": null
+      }
+    },
+    "http_long_cloning": {
+      "sample_rate": 22050,
+      "duration_seconds": 25.75,
+      "elapsed_seconds": 41.907,
+      "chunks": 2,
+      "seed": 75,
+      "voice_id": "48ffaf6ecefa4086afc0a6898ec22311",
+      "memory": {
+        "peak_allocated_mib": 2339.3,
+        "peak_reserved_mib": 2590.0,
+        "gpu_uuid": "GPU-1fbff0da-1530-2c25-e1df-4f00ecd1601b",
+        "gpu_name": "NVIDIA GeForce RTX 3060",
+        "windows_driver": {
+          "available": true,
+          "samples": 83,
+          "peak_dedicated_mib": 2719.18,
+          "peak_shared_mib": 78.0,
+          "current_dedicated_mib": 2719.18,
+          "current_shared_mib": 78.0
+        }
+      },
+      "audio_sha256": "a7c5fed2413370f5e1044eae6331664282a1a32571883a456e01ae11d188852e",
+      "request": {
+        "text": "The morning was quiet, and sunlight was falling across the desk. A notebook lay open beside a cup of coffee. Outside, the trees moved slowly in the breeze, while a few birds called from the garden. There was time to read, think, and finish the next page before the rest of the house woke up. This final sentence checks that a longer passage can continue across more than one speech segment.",
+        "voice_id": "48ffaf6ecefa4086afc0a6898ec22311",
+        "language_tag": "en_us",
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "repetition_penalty": 1.1,
+        "max_new_tokens": 2500,
+        "seed": 75,
+        "client_request_id": null
+      }
+    }
+  },
+  "tools": [
+    "cancel_speech_job",
+    "generate_speech",
+    "get_speech_job",
+    "list_voices",
+    "speech_service_status",
+    "upload_voice"
+  ]
+}

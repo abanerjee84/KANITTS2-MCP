@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kani-tts-local"
+version = "0.1.0"
+description = "Local KaniTTS 2 English speech and voice cloning with MCP, HTTP and CLI"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi==0.115.12", "starlette==0.46.2", "uvicorn==0.34.3", "mcp==1.30.0",
+  "httpx>=0.28,<1", "filelock>=3,<5", "huggingface-hub>=0.35,<1",
+  "tomlkit>=0.13,<1", "truststore>=0.10,<1", "soundfile>=0.13,<1",
+  "numpy>=1.26,<3", "scipy>=1.12,<2", "pywin32>=310; sys_platform == 'win32'",
+]
+
+[project.optional-dependencies]
+inference = ["torch==2.8.0", "transformers==4.56.0", "accelerate>=1,<2", "nanocodec-torch==1.0.0"]
+test = ["pytest>=8", "pytest-asyncio>=0.25", "ruff>=0.12"]
+
+[project.scripts]
+kani-tts = "kani_tts_mcp.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kani_tts_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+target-version = "py312"
+exclude = ["vendor", "src/kani_tts_mcp/_upstream"]
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "B"]

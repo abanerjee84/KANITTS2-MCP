@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "local-kani": {
+      "command": "E:\\TOOLS\\KANITTS2-MCP\\.venv\\Scripts\\python.exe",
+      "args": ["-m", "kani_tts_mcp", "mcp"],
+      "env": {"KANI_TTS_HOME": "E:\\TOOLS\\KANITTS2-MCP\\data"}
+    }
+  }
+}

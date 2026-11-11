@@ -1,0 +1,8 @@
+{
+  "text": "Welcome. This speech was generated locally with Kani TTS version two.",
+  "temperature": 1.0,
+  "top_p": 0.95,
+  "repetition_penalty": 1.1,
+  "max_new_tokens": 2500,
+  "seed": 42
+}

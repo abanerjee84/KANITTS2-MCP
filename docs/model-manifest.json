@@ -1,0 +1,32 @@
+{
+  "tts": {
+    "repo": "nineninesix/kani-tts-2-en",
+    "revision": "733435d9229fb6d5d2cdf23a44399a155ca2ab78",
+    "sha256": {
+      "README.md": "bbfbd8092c63e79c5698bcee4434d90d99ecc13340b41f175fe5f9d8d689108c",
+      "config.json": "8a61e943b6056e4fd320ab342f15b808e8a15ea40cc316b50b6a145142d5ce28",
+      "model.safetensors": "c168f7f1118226b8cca6c77d8bf3eef13c3929e04d73d54740f66bc2749a6682",
+      "special_tokens_map.json": "742aefe2b7dec496e8caffdba03a75d0c1a9925d53bd3f3e0d388c96b591b6f4",
+      "tokenizer.json": "edddece52a5a2847b6a8477eac16ab39359b05f6f9c53ee92efc11755465b7ed",
+      "tokenizer_config.json": "2c66e411a901df84329f0be59d325086f5f85fb4fbb56de265da7a5a0094f597",
+      "trainer_state.json": "bad93c8cad4d7d298ba32bb5b021f6a9322ca81390dcabe75b3d8703e728ff37"
+    }
+  },
+  "speaker": {
+    "repo": "nineninesix/speaker-emb-tbr",
+    "revision": "419c1dba057b2f92aba4259a101d785cf8ef213d",
+    "sha256": {
+      "README.md": "910ba85cdb5b1a81cf28078b3d3ba6544ea35d8730196244a55d6536627a3d8a",
+      "config.json": "4e048050550fc6c8d6953144fe80ff66a3a21a5d2ca25d60ccfd12cdbb332ac4",
+      "model.safetensors": "8583b130f32acae432dde0cd54d978c69521ac099ad9196d33df552ff893f497"
+    }
+  },
+  "codec": {
+    "repo": "nvidia/nemo-nano-codec-22khz-0.6kbps-12.5fps",
+    "revision": "5c8e22ed763c14d81337fbe6ca74062f3d10f7e5",
+    "sha256": {
+      "nemo-nano-codec-22khz-0.6kbps-12.5fps.nemo": "bd5883099d0c74ceda760b6b7a1600b86da4d8a02531c9c282679951dcb08870",
+      "README.md": "8ba4783e3b44da0c5dd37a76aa8c6e3520c8d608a31c10b71356f185ad83f089"
+    }
+  }
+}
